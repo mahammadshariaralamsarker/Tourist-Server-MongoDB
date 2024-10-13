@@ -85,6 +85,7 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result)
   })
+
   app.get('/product/:id',async(req,res) => {
   const id = req.params.id;
   const query = {_id: new ObjectId(id)}
@@ -125,28 +126,22 @@ async function run() {
     res.send(result);
   })
   // report Page
-  app.get('/product', (req, res) => {
-    const email = req.query.email;
-    const fromDate = new Date(req.query.from);
-    const toDate = new Date(req.query.to);
-  
-    const query = {
-      Email: email,
-      date: {
-        $gte: fromDate, // Greater than or equal to the 'from' date
-        $lte: toDate    // Less than or equal to the 'to' date
-      }
+  app.get('/report', async (req, res) => {
+    const { email, from, to } = req.query;
+    console.log(email, from, to);
+
+    // Create the filter for the query
+    const filter = {
+        Email: email,
     };
+
+    // Fetching reports from the Product collection
+    const cursor = Product.find(filter); // Use filter to find relevant documents
+    const result = await cursor.toArray(); // Convert cursor to array
+    console.log(result);
+    res.send(result);
+});
   
-    Product.find(query).toArray()
-      .then((products) => {
-        res.send(products);
-      })
-      .catch((error) => {
-        console.error('Error fetching product data:', error);
-        res.status(500).send('Internal Server Error');
-      });
-  });
   // Categorycal Page List
   
   app.get('/category',async(req,res) => {
