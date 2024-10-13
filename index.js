@@ -129,15 +129,17 @@ async function run() {
   app.get('/report', async (req, res) => {
     const { email, from, to } = req.query;
     console.log(email, from, to);
-
-    // Create the filter for the query
+    /* const startDate = new Date(from);
+    const endDate = new Date(to); */
     const filter = {
-        Email: email,
-    };
-
-    // Fetching reports from the Product collection
-    const cursor = Product.find(filter); // Use filter to find relevant documents
-    const result = await cursor.toArray(); // Convert cursor to array
+      Email: email,
+    /*   date:{
+          $gte: startDate,
+          $lte: endDate
+      } */
+  };
+    const cursor = Product.find(filter); 
+    const result = await cursor.toArray(); 
     console.log(result);
     res.send(result);
 });
