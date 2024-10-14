@@ -3,14 +3,9 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT||5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-
-
-//  middleware
-// app.use(cors());
+app.use(cors()); 
 app.use(express.json());
-app.use(cors({
-  origin: '*', 
-}));
+
 
 app.get('/',(req,res)=>{
     res.send('Tourist server is  running ')
@@ -57,7 +52,6 @@ async function run() {
     const id = req.params.id;
     console.log(id);
     const filter = {_id: new ObjectId(id)}
-    // const options = {upsert: true };
     const newProduct = req.body
     console.log(newProduct);
     const updateDocument = {
@@ -102,7 +96,6 @@ async function run() {
     const id = req.params.id;
     console.log(id);
     const filter = {_id: new ObjectId(id)}
-    // const options = {upsert: true };
     const newProduct = req.body
     console.log(newProduct);
     const updateDocument = {
@@ -113,7 +106,6 @@ async function run() {
       },
   };
     const result = await Product.updateOne(filter,updateDocument)
-    console.log(result);
     res.send(result);
   })
   
@@ -122,21 +114,14 @@ async function run() {
     console.log("delete from database ",id)
     const query = {_id: new ObjectId(id)}
     const result = await Product.deleteOne(query)
-    console.log(result)
     res.send(result);
   })
   // report Page
   app.get('/report', async (req, res) => {
     const { email, from, to } = req.query;
     console.log(email, from, to);
-    /* const startDate = new Date(from);
-    const endDate = new Date(to); */
     const filter = {
       Email: email,
-    /*   date:{
-          $gte: startDate,
-          $lte: endDate
-      } */
   };
     const cursor = Product.find(filter); 
     const result = await cursor.toArray(); 
@@ -159,7 +144,6 @@ res.send(result);
 })
   app.post('/category',async(req,res) =>{
     const newCoffee = req.body;
-    console.log(" newCoffee = ",newCoffee)
     const result = await Category.insertOne(newCoffee);
     res.send(result);
 });
@@ -167,7 +151,6 @@ app.patch('/category/:id',async(req,res) => {
   const id = req.params.id;
   console.log(id);
   const filter = {_id: new ObjectId(id)}
-  // const options = {upsert: true };
   const newProduct = req.body
   console.log(newProduct);
   const updateDocument = {
@@ -187,7 +170,6 @@ app.delete('/category/:id',async(req,res) =>{
   console.log("delete from database ",id)
   const query = {_id: new ObjectId(id)}
   const result = await Category.deleteOne(query)
-  console.log(result)
   res.send(result);
 })
   
