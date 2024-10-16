@@ -8,7 +8,7 @@ app.use(express.json());
 
 
 app.get('/',(req,res)=>{
-    res.send('Tourist server is  running ')
+    res.send('Tourist server is running ')
 })
 
 app.listen(port,()=>{
@@ -120,13 +120,21 @@ async function run() {
   app.get('/report', async (req, res) => {
     const { email, from, to } = req.query;
     console.log(email, from, to);
+    
     const filter = {
       Email: email,
-  };
-    const cursor = Product.find(filter); 
-    const result = await cursor.toArray(); 
-    console.log(result);
-    res.send(result);
+    
+    };
+
+    try {
+        const cursor = Product.find(filter);
+        const result = await cursor.toArray();
+        console.log(result);
+        res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error fetching data");
+    }
 });
   
   // Categorycal Page List
